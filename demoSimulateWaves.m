@@ -136,7 +136,7 @@ wavesStruct.beta     = pi;
 wavesStruct.xVec     = linspace(0, 299, 300);
 wavesStruct.yVec     = linspace(0, 99, 100);
 wavesStruct.Ts       = 0.2;
-wavesStruct.tVec     = 0:wavesStruct.Ts:500;
+wavesStruct.tVec     = 0:wavesStruct.Ts:300;
 wavesStruct.U        = 0;
 
 wavesStruct.waves = simulateWaves(wavesStruct.seaState, ...
