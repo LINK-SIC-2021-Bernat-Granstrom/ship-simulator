@@ -10,17 +10,17 @@
 % Demo 7:   No waves, stabilization test
 %
 % To plot and visualize simulations again, run:
-% w = load(waveFile).wavesStruct;
-% plotShipStates(states, w.tVec, w.Ts, w.beta);
-% visualizeSimulation(states, w.waves, w.xVec, w.yVec, w.tVec, face, vert, cogVec);
+w = load(waveFile).wavesStruct;
+plotShipStates(states, w.tVec, w.Ts, w.beta);
+visualizeSimulation(states, w.waves, w.xVec, w.yVec, w.tVec, face, vert, cogVec);
 
 % Add paths to wave-files, help-files
-wavesPath = [pwd, '\wave-files'];
-helpFilesPath = [pwd, '\help-files'];
-boatPath = [pwd, '\boat-files'];
-addpath(wavesPath);
-addpath(helpFilesPath);
-addpath(boatPath);
+% wavesPath = [pwd, '\wave-files'];
+% helpFilesPath = [pwd, '\help-files'];
+% boatPath = [pwd, '\boat-files'];
+% addpath(wavesPath);
+% addpath(helpFilesPath);
+% addpath(boatPath);
 
 %% ------- Create ship with properties below
 % Ship:                       HMS Norfolk (hull only)
@@ -55,7 +55,7 @@ shipStruct.x0 = [0    0   0  0   0  0   0     0    0]; % Initial state values
 % Ship speed        0
 isPlot = true;
 isVisual = true;
-waveFile = 'waves_seaState_6_long_beta_3.14_grid_300x100_time_0_0.2_500_U_0.mat';
+waveFile = 'waves__seaState_6__long__beta_3.14__grid_300x100__time_0_0.2_500__U_0.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, isPlot, isVisual);
 
 %% --------------- Demo #2: Sea state 6 roll test (waves from the west)
@@ -91,7 +91,7 @@ waveFile = 'waves_seaState_6_long_beta_2.36_grid_300x100_time_0_0.2_200_U_0.mat'
 % Time:             0:0.2:500
 % Ship speed        0
 
-waveFile = 'waves_seaState_3_long_beta_3.14_grid_300x100_time_0_0.2_500_U_0.mat';
+waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_500__U_0.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
 %% --------------- Demo #5: Sea state 3, waves from the north, 15 knots
