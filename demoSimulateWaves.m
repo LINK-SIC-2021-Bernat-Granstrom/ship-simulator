@@ -233,26 +233,26 @@ saveWavesFile(wavesStruct);
 %% Plot snapshot of short-crested seas for 3 different sea states
 clear; clc;
 beta     = 0;
-xVec     = linspace(0, 200, 80);
-yVec     = linspace(0, 200, 80);
+xVec     = linspace(0, 300, 250);
+yVec     = linspace(0, 300, 250);
 Ts       = 0.2;
 tVec     = 0:Ts:1;
-dmu      = pi/10;
+dmu      = pi/2.5;
 muVec    = -pi/2:dmu:pi/2;
 
-waves_seaState_2 = simulateWaves(4, xVec, yVec, beta, tVec, 0, [], muVec, dmu);
-waves_seaState_4 = simulateWaves(4, xVec, yVec, beta, tVec, 0);
+waves_seaState_2 = simulateWaves(2, xVec, yVec, beta, tVec, 0, [], muVec, dmu);
+waves_seaState_4 = simulateWaves(4, xVec, yVec, beta, tVec, 0, [], muVec, dmu);
 % waves_seaState_6 = simulateWaves(5, xVec, yVec, beta, tVec, [], muVec, dmu);
 
 figure(1);
 subplot(1, 2, 1);
 sea_1 = surf(xVec, yVec, waves_seaState_2(:, :, 1));
-axis([10 200 10 200 -3.5 3.5]);
+axis([10 250 10 250 -5 5]);
 % title("Sea state 2");
 xlabel("[m]"); ylabel("[m]"); zlabel("[m]");
 subplot(1, 2, 2);
 sea_3 = surf(xVec, yVec, waves_seaState_4(:, :, 1));
-axis([10 200 10 200 -3.5 3.5]);
+axis([10 250 10 250 -3.5 3.5]);
 % title("Sea state 3");
 xlabel("[m]"); ylabel("[m]"); zlabel("[m]");
 % subplot(3, 1, 3);
