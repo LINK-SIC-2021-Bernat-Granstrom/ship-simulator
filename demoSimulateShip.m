@@ -42,7 +42,7 @@ shipStruct.refYaw      = 0;
 shipStruct.cogOffset   = [-4.77 0.022 -2];
 shipStruct.helipadPos  = [40 35 6];
 %               [v_u v_v v_w phi th psi w_phi w_th w_psi]'
-shipStruct.x0 = [0    0   0  0   0  0   0     0    0]; % Initial state values
+shipStruct.x0 = [0    0   0  1.745e-5   0  0   0     0    0]; % Initial state values
 
 
 %% --------------- Demo #1: Sea state 6 pitch test (waves from the north)
@@ -91,8 +91,8 @@ waveFile = 'waves__seaState_6__long__beta_2.36__grid_300x100__time_0_0.2_200__U_
 % Time:             0:0.2:500
 % Ship speed        0
 
-waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_500__U_0.mat';
-[states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
+waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_300__U_0.mat';
+[states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, false);
 
 %% --------------- Demo #5: Sea state 3, waves from the north, 15 knots
 % ------- Use wave with properties below
