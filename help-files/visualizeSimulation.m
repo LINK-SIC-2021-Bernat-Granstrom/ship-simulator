@@ -7,23 +7,37 @@ function visualizeSimulation(states, waves, xVec, yVec, tVec, faces, vertices, c
              'AmbientStrength', 0.35); hold on;
     axis('image');
     view([-135 35]);
-    camlight('headlight');
-    material('dull');
+    
 
     % ---------- Sea with no waves:
     % sea = surf(xVec, yVec, zeros(length(yVec), length(xVec)));
     % ---------- Sea with waves:
-    sea = surf(xVec, yVec, waves(:, :, 1));
-
+    %sea = surf(xVec, yVec, waves(:, :, 1));
+    
+    
+    xVecNorm  = repmat(xVec,length(yVec),1);
+    yVecNorm  = repmat(yVec',1,length(xVec));
+    
+    [nx, ny, nz] = surfnorm(xVecNorm, yVecNorm, waves(:, :, 1));
+    b = reshape([nx ny nz], 100,300,3);
+    sea = surf(xVec, yVec, waves(:, :, 1),'VertexNormals',b,'EdgeColor','none','FaceAlpha',1,'FaceColor',[0 0 1]);
+    camlight('LEFT');
+    material('shiny');
+    lighting gouraud
+    
     % axis([250 500 250 350 -20 20]);
-    axis([5 200 0 70 -5 15]);
+    axis([5 200 0 70 -20 20]);
     xlabel('x [m]');
     ylabel('y [m]');
     pause(0.1);
     deltaX = 0; deltaY = 0; deltaZ = 0;
 
     for t=2:length(tVec)-1
+        [nx, ny, nz] = surfnorm(xVecNorm, yVecNorm, waves(:, :, t));
+        b = reshape([nx ny nz], 100,300,3);
         sea.ZData = waves(:, :, t); % comment out for sea without waves
+        
+        
         deltaX = deltaX + states(1, t) - states(1, t-1);
         deltaY = deltaY + states(2, t) - states(2, t-1);
         deltaZ = deltaZ + states(3, t) - states(3, t-1);
