@@ -83,6 +83,7 @@ Kp_force  = 9.5;
 Ki_force  = 0.82;
 Kp_torque = 3.5;
 Ki_torque = 0.5;
+K_addedMass = 10;
 
 %Cd        = 5; 
 %B         = 1e10;
@@ -205,7 +206,8 @@ for tIdx=1:length(tVec)-1
     phi = states(7, tIdx); th = states(8, tIdx); psi = states(9, tIdx);
     v_u = states(4, tIdx);
     extraUForce = Ki_force * extraUForce + pRegulator(Kp_force, refSpeedU, v_u);
-    forcesInLocalCoord = R(phi, -th, -psi) * [F_net(1)/M; -F_net(2)/M; -F_net(3)/M + g] ... 
+    addedMass = v_u * K_addedMass;
+    forcesInLocalCoord = R(phi, -th, -psi) * [F_net(1)/(M + addedMass); -F_net(2)/M; -F_net(3)/M + g] ... 
                          + [extraUForce; 0; 0];
     
     extraYawTorque = Ki_torque * extraYawTorque + pRegulator(Kp_torque, refYaw, psi);
