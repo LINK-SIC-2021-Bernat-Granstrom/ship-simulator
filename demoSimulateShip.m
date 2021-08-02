@@ -55,7 +55,7 @@ shipStruct.x0 = [0    0   0  1.745e-5   0  0   0     0    0]; % Initial state va
 % Ship speed        0
 isPlot = true;
 isVisual = true;
-waveFile = 'waves__seaState_6__long__beta_3.14__grid_300x100__time_0_0.2_500__U_0.mat';
+waveFile = 'waves__seaState_6__long__beta_3.14__grid_300x100__time_0_0.2_200__U_0.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, isPlot, isVisual);
 
 %% --------------- Demo #2: Sea state 6 roll test (waves from the west)
@@ -91,7 +91,8 @@ waveFile = 'waves__seaState_6__long__beta_2.36__grid_300x100__time_0_0.2_200__U_
 % Time:             0:0.2:500
 % Ship speed        0
 
-waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_500__U_0.mat';
+waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_300__U_0.mat';
+     
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
 %% --------------- Demo #5: Sea state 3, waves from the north, 15 knots

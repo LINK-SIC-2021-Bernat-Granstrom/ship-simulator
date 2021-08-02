@@ -168,12 +168,12 @@ cogVec         = zeros(length(tVec), 3);
 % ----- Initialize all states and set 1st state
 states = zeros(12, length(tVec));
 %                    [x       y       z     ],[v_u v_v v_w phi th psi w_phi w_th w_psi]'
-states(:, 1) = cat(2,[cog(1)  cog(2)  cog(3)],shipStruct.x0)';
+states(:, 1) = cat(2,[cog(1)  -cog(2)  -cog(3)],shipStruct.x0)'; 
 
 % ----- Rotate facePoints & normals according to initial states
 phi = states(7, 1); th = states(8, 1); psi = states(9, 1);
-facePoints = (R(phi, th, psi)' * (facePoints - cog)')' + cog; 
-normals    = (R(phi, th, psi)' * normals')';
+facePoints = (R(phi, -th, -psi)' * (facePoints - cog)')' + cog; 
+normals    = (R(phi, -th, -psi)' * normals')'; 
 
 % ----- State update for all time steps
 for tIdx=1:length(tVec)-1
@@ -196,7 +196,7 @@ for tIdx=1:length(tVec)-1
             % Torque
             lever = (facePoints(nIdx, :) - cog)';
             phi = states(7, tIdx); th = states(8, tIdx); psi = states(9, tIdx);
-            Tau = cross(R(phi, th, psi) * lever, R(phi, th, psi) * F_buoy);
+            Tau = cross(R(phi, -th, -psi) * lever, R(phi, -th, -psi) * F_buoy);
             Tau_net = Tau_net + Tau;
         end
     end
@@ -205,11 +205,11 @@ for tIdx=1:length(tVec)-1
     phi = states(7, tIdx); th = states(8, tIdx); psi = states(9, tIdx);
     v_u = states(4, tIdx);
     extraUForce = Ki_force * extraUForce + pRegulator(Kp_force, refSpeedU, v_u);
-    forcesInLocalCoord = R(phi, th, psi) * [F_net(1)/M; F_net(2)/M; F_net(3)/M - g] ...
+    forcesInLocalCoord = R(phi, -th, -psi) * [F_net(1)/M; -F_net(2)/M; -F_net(3)/M + g] ... 
                          + [extraUForce; 0; 0];
     
     extraYawTorque = Ki_torque * extraYawTorque + pRegulator(Kp_torque, refYaw, psi);
-    torqueInLocalCoord = [Tau_net(1)/Iu; Tau_net(2)/Iv; Tau_net(3)/Iw] ...
+    torqueInLocalCoord = [Tau_net(1)/Iu; -Tau_net(2)/Iv; -Tau_net(3)/Iw] ...
                          + [0; 0; extraYawTorque];
     
     inputs = [forcesInLocalCoord' torqueInLocalCoord']';
@@ -221,7 +221,6 @@ for tIdx=1:length(tVec)-1
     rotVelDerivative = T(phi, th) * [w_phi; w_th; w_psi];
     
     coriolisV = cross([w_phi, w_th, w_psi]',[v_u, v_v, v_w]');
-    %coriolisOmega = cross([w_phi,w_th,w_psi]',[[Ix*w_phi Iy*w_th Iz*w_psi]');
     
     % Make time-update as below due to non-linearities in the A matrix
     states(:, tIdx+1) = [states(1,tIdx) + sys.A(1,4) * velInGlobalCoord(1);
@@ -247,10 +246,10 @@ for tIdx=1:length(tVec)-1
     deltaPsi = states(9, tIdx+1) - states(9, tIdx);
     
     % Rotate facepoints and normals with R'
-    facePoints = (R(deltaPhi, deltaTh, deltaPsi)' * (facePoints - cog)')' ...
-                 + cog + [deltaX deltaY deltaZ]; 
-    normals = (R(deltaPhi, deltaTh, deltaPsi)' * normals')';
-    cog = cog + [deltaX deltaY deltaZ];
+    facePoints = (R(deltaPhi, -deltaTh, -deltaPsi)' * (facePoints - cog)')' ...
+                 + cog + [deltaX -deltaY -deltaZ];
+    normals = (R(deltaPhi, -deltaTh, -deltaPsi)' * normals')';
+    cog = cog + [deltaX -deltaY -deltaZ];
 end
 disp('Simulation done!');
 toc;
@@ -258,7 +257,7 @@ toc;
 % ------------------------------- Plot states through time ----------------
 if isPlot
     plotShipStates(states, tVec, Ts, beta);
-    plotHelipadStates(states, tVec, Ts, beta, shipStruct.HelipadPos)
+    plotHelipadStates(states, tVec, Ts, beta, shipStruct.helipadPos);
 end
 % ------------------------------- Visualize simulation in 3D --------------
 if isVisual

@@ -29,8 +29,8 @@ function visualizeSimulation(states, waves, xVec, yVec, tVec, faces, vertices, c
         deltaY = deltaY + states(2, t) - states(2, t-1);
         deltaZ = deltaZ + states(3, t) - states(3, t-1);
 
-        p.Vertices = (R(states(7,t), states(8,t), states(9,t))' * (vertices-cogVec(t,:))')'...
-                     + cogVec(t,:) + [deltaX deltaY deltaZ];
+        p.Vertices = (R(states(7,t), -states(8,t), -states(9,t))' * (vertices-cogVec(t,:))')'...%NEDNEDNEDNEED
+                     + cogVec(t,:) + [deltaX -deltaY -deltaZ];%NEDNEDNEDNEED
         drawnow;
     end
 end
