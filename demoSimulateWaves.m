@@ -230,6 +230,41 @@ wavesStruct.displayName = [
    '\n'];
 saveWavesFile(wavesStruct);
 
+%% Wave #7: Sea state 3 wave coming from bow (front)
+% ------- Use wave with properties below
+% Sea state:        3
+% Wave type (beta): long-crested
+% Wave angle:       180 degrees (from the stern)
+% Grid:             2000x100
+% Time:             0:0.2:50
+% Relative speed    0 m/s
+
+wavesStruct.seaState = 3;
+wavesStruct.beta     = pi;
+wavesStruct.xVec     = linspace(0, 849, 850);
+wavesStruct.yVec     = linspace(0, 99, 100);
+wavesStruct.Ts       = 0.2;
+wavesStruct.tVec     = 0:wavesStruct.Ts:90;
+wavesStruct.U        = 0;
+
+wavesStruct.waves = simulateWaves(wavesStruct.seaState, ...
+                                       wavesStruct.xVec, wavesStruct.yVec, ...
+                                       wavesStruct.beta, wavesStruct.tVec, wavesStruct.U);
+wavesStruct.waveType = 'long';
+
+wavesStruct.displayName = [
+   'Waves with properties: ', ...
+   '\n   -Sea state: ', num2str(wavesStruct.seaState), ...
+   '\n   -Significant wave height: ', num2str(getSignificantWaveHeight(wavesStruct.seaState)), ' m' ...
+   '\n   -', wavesStruct.waveType, ' crested' ...
+   '\n   -Main wave direction (beta): ', num2str(wavesStruct.beta), ' rad', ...
+   '\n   -xVec: ', num2str(wavesStruct.xVec(1)), ':', num2str(1), ':', num2str(wavesStruct.xVec(end)), ' m', ...
+   '\n   -yVec: ', num2str(wavesStruct.yVec(1)), ':', num2str(1), ':', num2str(wavesStruct.yVec(end)), ' m', ...
+   '\n   -tVec: ', num2str(1), ':', num2str(wavesStruct.Ts), ':', num2str(wavesStruct.tVec(end)), ' s', ...
+   '\n   -U: ', num2str(wavesStruct.U), ' m/s', ...
+   '\n'];
+saveWavesFile(wavesStruct);
+
 %% Plot snapshot of short-crested seas for 3 different sea states
 clear; clc;
 beta     = 0;

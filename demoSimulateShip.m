@@ -10,17 +10,17 @@
 % Demo 7:   No waves, stabilization test
 %
 % To plot and visualize simulations again, run:
-w = load(waveFile).wavesStruct;
-plotShipStates(states, w.tVec, w.Ts, w.beta);
-visualizeSimulation(states, w.waves, w.xVec, w.yVec, w.tVec, face, vert, cogVec);
+% w = load(waveFile).wavesStruct;
+% plotShipStates(states, w.tVec, w.Ts, w.beta);
+% visualizeSimulation(states, w.waves, w.xVec, w.yVec, w.tVec, face, vert, cogVec);
 
 % Add paths to wave-files, help-files
-% wavesPath = [pwd, '\wave-files'];
-% helpFilesPath = [pwd, '\help-files'];
-% boatPath = [pwd, '\boat-files'];
-% addpath(wavesPath);
-% addpath(helpFilesPath);
-% addpath(boatPath);
+wavesPath = [pwd, '\wave-files'];
+helpFilesPath = [pwd, '\help-files'];
+boatPath = [pwd, '\boat-files'];
+addpath(wavesPath);
+addpath(helpFilesPath);
+addpath(boatPath);
 
 %% ------- Create ship with properties below
 % Ship:                       HMS Norfolk (hull only)
@@ -37,9 +37,9 @@ shipStruct.len         = 137;
 shipStruct.width       = 15;
 shipStruct.height      = 16;
 shipStruct.verticesPos = [30 35 5.55];
+shipStruct.cogOffset   = [-4.77 0.022 -2];
 shipStruct.refSpeedU   = 0;
 shipStruct.refYaw      = 0;
-shipStruct.cogOffset   = [-4.77 0.022 -2];
 shipStruct.helipadPos  = [40 35 6];
 %               [v_u v_v v_w phi th psi w_phi w_th w_psi]'
 shipStruct.x0 = [0    0   0  1.745e-5   0  0   0     0    0]; % Initial state values
@@ -130,6 +130,15 @@ waveFile = 'waves__seaState_3__short__beta_3.14__grid_300x100__time_0_0.2_500__U
 waveFile = 'waves_seaState_3_long_beta_3.14_grid_300x100_time_0_0.2_500.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
-
+%% --------------- Demo #8: Corridor test
+% ------- Use wave with properties below
+% Sea state:        3
+% Wave type :       No waves
+% Grid:             300x100
+% Time:             0:0.2:50
+% Ship speed        0
+shipStruct.refSpeedU   = 27; % 15 kts
+waveFile = 'waves__seaState_3__long__beta_3.14__grid_800x100__time_0_0.2_50__U_0.mat';
+[states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
 

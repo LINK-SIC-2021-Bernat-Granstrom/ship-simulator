@@ -15,8 +15,7 @@ function visualizeSimulation(states, waves, xVec, yVec, tVec, faces, vertices, c
     % ---------- Sea with waves:
     sea = surf(xVec, yVec, waves(:, :, 1));
     
-    % axis([250 500 250 350 -20 20]);
-    axis([5 200 0 70 -20 20]);
+    axis([5 800 0 70 -20 20]);
     xlabel('x [m]');
     ylabel('y [m]');
     pause(0.1);
