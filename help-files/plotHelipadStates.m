@@ -16,12 +16,12 @@ figure;
     % Global position states x, y, z
     subplot(4, 3, 1); plot(tVec * Ts, globalHelipadPos(1, :)); title('Global Helipad position X [m]'); xlabel('Time [s]');
     subplot(4, 3, 2); plot(tVec * Ts, globalHelipadPos(2, :)); title('Global Helipad position Y [m]'); xlabel('Time [s]');
-    subplot(4, 3, 3); plot(tVec * Ts, globalHelipadPos(3, :)); title('Global Helipad position Z [m]'); xlabel('Time [s]');
+    subplot(4, 3, 3); plot(tVec * Ts, -globalHelipadPos(3, :)); title('Global Helipad position Z (UP)[m]'); xlabel('Time [s]');
 
     % Local velocity states u, v, w
     subplot(4, 3, 4); plot(tVec * Ts, globalVel(1, :) / Ts); title('Global velocity U [m/s]'); xlabel('Time [s]');
     subplot(4, 3, 5); plot(tVec * Ts, globalVel(2, :) / Ts); title('Global velocity V [m/s]'); xlabel('Time [s]');
-    subplot(4, 3, 6); plot(tVec * Ts, globalVel(3, :) / Ts); title('Global velocity W [m/s]'); xlabel('Time [s]');
+    subplot(4, 3, 6); plot(tVec * Ts, -globalVel(3, :) / Ts); title('Global velocity W (UP)[m/s]'); xlabel('Time [s]');
 
     % Local angles phi, th, psi
     subplot(4, 3, 7); plot(tVec * Ts, rad2deg(states(7, :))); title('Roll \phi [deg]'); xlabel('Time [s]');
