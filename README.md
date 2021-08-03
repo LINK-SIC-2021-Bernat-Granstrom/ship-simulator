@@ -1,7 +1,7 @@
 # Ship Simulator
 Ship simulator is made of MATLAB files that simulates the **motion of waves** and the **motion of ships** on those waves. It was developed as part of a 6-week summer project between the competence center [LINK-SIC](https://liu.se/en/research/link-sic) and a company. 
 
-For a quick overview of the results, see videos of a [pitch test](https://www.youtube.com/watch?v=bgkPYYFX2YQ) and a [roll test](https://www.youtube.com/watch?v=zRmFIrhpuu0).
+For a quick overview of the results, see videos of a [pitch test](https://www.youtube.com/watch?v=bgkPYYFX2YQ), a [roll test](https://www.youtube.com/watch?v=zRmFIrhpuu0) and a [corridor test](https://youtu.be/J-wDq4UX1po).
 
 ## Installation
 Just clone the repository on your machine. Only official MATLAB toolboxes are used.
