@@ -137,8 +137,8 @@ waveFile = 'waves_seaState_3_long_beta_3.14_grid_300x100_time_0_0.2_500.mat';
 % Grid:             300x100
 % Time:             0:0.2:50
 % Ship speed        0
-shipStruct.refSpeedU   = 27; % 15 kts
-waveFile = 'waves__seaState_3__long__beta_3.14__grid_800x100__time_0_0.2_50__U_0.mat';
+shipStruct.refSpeedU   = 7.7; % 15 kts
+waveFile = 'waves__seaState_3__long__beta_3.14__grid_850x100__time_0_0.2_90__U_0.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
 

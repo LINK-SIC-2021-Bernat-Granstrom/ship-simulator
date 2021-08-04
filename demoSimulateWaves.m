@@ -235,8 +235,8 @@ saveWavesFile(wavesStruct);
 % Sea state:        3
 % Wave type (beta): long-crested
 % Wave angle:       180 degrees (from the stern)
-% Grid:             2000x100
-% Time:             0:0.2:50
+% Grid:             850x100
+% Time:             0:0.2:90
 % Relative speed    0 m/s
 
 wavesStruct.seaState = 3;

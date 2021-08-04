@@ -204,7 +204,7 @@ for tIdx=1:length(tVec)-1
     
     % ------- Set up input
     phi = states(7, tIdx); th = states(8, tIdx); psi = states(9, tIdx);
-    v_u = states(4, tIdx); v_v = states(5, tIdx); v_w = states(6, tIdx);
+    v_u = states(4, tIdx);
     extraUForce = Ki_force * extraUForce + pRegulator(Kp_force, refSpeedU, v_u);
     
     addedMassU = abs(v_u) * K_addedMass;
@@ -243,9 +243,9 @@ for tIdx=1:length(tVec)-1
                          states(7,tIdx) + sys.A(7,10) * rotVelDerivative(1);
                          states(8,tIdx) + sys.A(8,11) * rotVelDerivative(2);
                          states(9,tIdx) + sys.A(9,12) * rotVelDerivative(3);
-                         sys.A(10,10) * states(10,tIdx)*Iu/(Iu+addedIU);
-                         sys.A(11,11) * states(11,tIdx)*Iv/(Iv+addedIV);
-                         sys.A(12,12) * states(12,tIdx)*Iw/(Iw+addedIW)] + sys.B * inputs;
+                         sys.A(10,10) * states(10,tIdx);
+                         sys.A(11,11) * states(11,tIdx);
+                         sys.A(12,12) * states(12,tIdx)] + sys.B * inputs;
     
     % ------- Update ship hull
     deltaX = states(1, tIdx+1) - states(1, tIdx);
