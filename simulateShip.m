@@ -79,11 +79,10 @@ ro = 997;
 g  = 9.81;   
 
 % ----- Tunable constants
-Kp_force  = 100000;%9.5;
-Ki_force  = 0.82;%
+Kp_force  = 9.5;
+Ki_force  = 0.82;
 Kp_torque = 3.5;
 Ki_torque = 0.5;
-K_addedMass = 0;
 
 %Cd        = 5; 
 %B         = 1e10;
@@ -137,7 +136,7 @@ A = [0 0 0       1         0       0         0  0   0    0       0    0;
      0 0 0       0         0       0         0  0   0    1       0    0;
      0 0 0       0         0       0         0  0   0    0       1    0;
      0 0 0       0         0       0         0  0   0    0       0    1;
-     0 0 0       0         0       0         0  0   0 -B_phi/(Iu)    0    0;
+     0 0 0       0         0       0         0  0   0 -B_phi/Iu    0    0;
      0 0 0       0         0       0         0  0   0    0     -B_th/Iv  0;
      0 0 0       0         0       0         0  0   0    0       0 -B_psi/Iw]; 
  
@@ -204,24 +203,15 @@ for tIdx=1:length(tVec)-1
     
     % ------- Set up input
     phi = states(7, tIdx); th = states(8, tIdx); psi = states(9, tIdx);
-    v_u = states(4, tIdx); v_v = states(5, tIdx); v_w = states(6, tIdx);
+    v_u = states(4, tIdx);
+    
     extraUForce = Ki_force * extraUForce + pRegulator(Kp_force, refSpeedU, v_u);
+    forcesInLocalCoord = R(phi, -th, -psi) * [F_net(1)/M; -F_net(2)/M; -F_net(3)/M + g] ... 
+                         + [extraUForce; 0; 0];
     
-    addedMassU = abs(v_u) * K_addedMass;
-    addedMassV = abs(v_v) * K_addedMass;
-    addedMassW = abs(v_w) * K_addedMass;
-    
-    addedIU = abs(states(10, tIdx)) * K_addedMass;
-    addedIV = abs(states(11, tIdx)) * K_addedMass;
-    addedIW = abs(states(12, tIdx)) * K_addedMass;
-    
-    forcesInLocalCoord = R(phi, -th, -psi) * [F_net(1)/(M + addedMassU); -F_net(2)/(M+addedMassV); -F_net(3)/(M + addedMassW) + g] ... 
-                         + [extraUForce/(M + addedMassU); 0; 0];
-    
-
     extraYawTorque = Ki_torque * extraYawTorque + pRegulator(Kp_torque, refYaw, psi);
-    torqueInLocalCoord = [Tau_net(1)/(Iu+addedIU); -Tau_net(2)/(Iv+addedIV); -Tau_net(3)/(Iw+addedIW)] ...
-                         + [0; 0; extraYawTorque/(Iw+addedIW)];
+    torqueInLocalCoord = [Tau_net(1)/Iu; -Tau_net(2)/Iv; -Tau_net(3)/Iw] ...
+                         + [0; 0; extraYawTorque];
     
     inputs = [forcesInLocalCoord' torqueInLocalCoord']';
     
@@ -237,15 +227,15 @@ for tIdx=1:length(tVec)-1
     states(:, tIdx+1) = [states(1,tIdx) + sys.A(1,4) * velInGlobalCoord(1);
                          states(2,tIdx) + sys.A(2,5) * velInGlobalCoord(2);
                          states(3,tIdx) + sys.A(3,6) * velInGlobalCoord(3);
-                         sys.A(4,4) * states(4,tIdx)*M/(M+addedMassU) - Ts * coriolisV(1);
-                         sys.A(5,5) * states(5,tIdx)*M/(M+addedMassV) - Ts * coriolisV(2);
-                         sys.A(6,6) * states(6,tIdx)*M/(M+addedMassW) - Ts * coriolisV(3);
+                         sys.A(4,4) * states(4,tIdx) - Ts * coriolisV(1);
+                         sys.A(5,5) * states(5,tIdx) - Ts * coriolisV(2);
+                         sys.A(6,6) * states(6,tIdx) - Ts * coriolisV(3);
                          states(7,tIdx) + sys.A(7,10) * rotVelDerivative(1);
                          states(8,tIdx) + sys.A(8,11) * rotVelDerivative(2);
                          states(9,tIdx) + sys.A(9,12) * rotVelDerivative(3);
-                         sys.A(10,10) * states(10,tIdx)*Iu/(Iu+addedIU);
-                         sys.A(11,11) * states(11,tIdx)*Iv/(Iv+addedIV);
-                         sys.A(12,12) * states(12,tIdx)*Iw/(Iw+addedIW)] + sys.B * inputs;
+                         sys.A(10,10) * states(10,tIdx);
+                         sys.A(11,11) * states(11,tIdx);
+                         sys.A(12,12) * states(12,tIdx)] + sys.B * inputs;
     
     % ------- Update ship hull
     deltaX = states(1, tIdx+1) - states(1, tIdx);
