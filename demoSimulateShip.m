@@ -8,6 +8,7 @@
 % Demo 5:   Sea state 3, long-crested waves, ship speed of 15 knots
 % Demo 6:   Sea state 3, short-crested waves, ship speed of 15 knots
 % Demo 7:   No waves, stabilization test
+% Demo 8:   Sea state 3, corridor test, ship speed of 15 knots
 %
 % To plot and visualize simulations again, run:
 % w = load(waveFile).wavesStruct;
@@ -36,13 +37,13 @@ shipStruct.M           = 2.5e6;
 shipStruct.len         = 137;
 shipStruct.width       = 15;
 shipStruct.height      = 16;
-shipStruct.verticesPos = [150 150 5.55];
+shipStruct.verticesPos = [35 70 5.55];
 shipStruct.cogOffset   = [-4.77 0.022 -2];
 shipStruct.refSpeedU   = 0;
 shipStruct.refYaw      = 0;
 shipStruct.helipadPos  = [40 35 6];
 %               [v_u v_v v_w phi th psi w_phi w_th w_psi]'
-shipStruct.x0 = [0    0   0  1.745e-5   0  0   0     0    0]; % Initial state values
+shipStruct.x0 = [0    0   0  0   0  0   0     0    0]; % Initial state values
 
 
 %% --------------- Demo #1: Sea state 6 pitch test (waves from the north)

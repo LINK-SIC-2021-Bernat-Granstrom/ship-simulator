@@ -10,10 +10,10 @@ function [states, faces, vertices, cogVec] = simulateShip(wavesFile, shipStruct,
 %                          -fixed coordinate system;
 %   - [w_phi, w_th, w_psi]: rotational velocity in the body-fixed
 %                           coordinate system.
-% The forces considered are only the hidrostatic (buoyancy) force by the 
-% water and the ship's weight and the coriolis effect. Ignores: added mass,
-% propels force. To calculate the inertia, the ship was assumed to be a 
-% solid cuboid. 
+% The forces considered are the hidrostatic (buoyancy) force by the water, 
+% the ship's weight, the coriolis effect and the propellers force. Ignores:
+% added mass, wind forces, dynamic water forces, etc. To calculate the 
+% inertia, the ship was assumed to be a solid cuboid. 
 %
 % Inputs:
 %   - wavesFile:  file containing waves and its properties;
@@ -60,10 +60,10 @@ len    = shipStruct.len;
 width  = shipStruct.width; 
 height = shipStruct.height;
 M      = shipStruct.M;
-%Cross sectional area of the submerged hull
-Au     = width*0.9 * height*0.33;
-Av     = height*0.33 * len;
-Aw     = len * width*0.9;
+% Cross sectional area of the submerged hull
+Au     = width * 0.9 * height * 0.33;
+Av     = height * 0.33 * len;
+Aw     = len * width * 0.9;
 
 % Offset to ship's center of gravity, set by trial and error
 cogOffset = shipStruct.cogOffset;
@@ -84,17 +84,13 @@ Ki_force  = 0.82;
 Kp_torque = 3.5;
 Ki_torque = 0.5;
 
-%Cd        = 5; 
-%B         = 1e10;
-
 C_du = 5;
 C_dv = 5;
 C_dw = 5;
 
-B_phi = 1e10/20;
+B_phi = 1e10 / 20;
 B_th  = 1e10;
 B_psi = 1e10;
-
 
 % ------------------------------- Load waves ------------------------------
 disp('1) Loading waves...');
@@ -126,19 +122,19 @@ disp('Boat loaded!');
 disp('3) Simulating states through time...');
 
 % ----- Define update matrices A and B (C is arbitrary) and discretize.
-%    x y z      v_u       v_v     v_w       phi th psi w_phi   w_th w_psi
-A = [0 0 0       1         0       0         0  0   0    0       0    0;
-     0 0 0       0         1       0         0  0   0    0       0    0;
-     0 0 0       0         0       1         0  0   0    0       0    0;
-     0 0 0 -0.5*C_du*ro*Au/M 0       0         0  0   0    0       0    0;
-     0 0 0       0 -0.5*C_dv*ro*Av/M 0         0  0   0    0       0    0;
-     0 0 0       0         0 -0.5*C_dw*ro*Aw/M 0  0   0    0       0    0;
-     0 0 0       0         0       0         0  0   0    1       0    0;
-     0 0 0       0         0       0         0  0   0    0       1    0;
-     0 0 0       0         0       0         0  0   0    0       0    1;
-     0 0 0       0         0       0         0  0   0 -B_phi/Iu    0    0;
-     0 0 0       0         0       0         0  0   0    0     -B_th/Iv  0;
-     0 0 0       0         0       0         0  0   0    0       0 -B_psi/Iw]; 
+%    x y z      v_u       v_v     v_w         phi th psi w_phi   w_th w_psi
+A = [0 0 0       1         0       0           0  0   0    0       0      0;
+     0 0 0       0         1       0           0  0   0    0       0      0;
+     0 0 0       0         0       1           0  0   0    0       0      0;
+     0 0 0 -0.5*C_du*ro*Au/M 0       0         0  0   0    0       0      0;
+     0 0 0       0 -0.5*C_dv*ro*Av/M 0         0  0   0    0       0      0;
+     0 0 0       0         0 -0.5*C_dw*ro*Aw/M 0  0   0    0       0      0;
+     0 0 0       0         0       0           0  0   0    1       0      0;
+     0 0 0       0         0       0           0  0   0    0       1      0;
+     0 0 0       0         0       0           0  0   0    0       0      1;
+     0 0 0       0         0       0           0  0   0 -B_phi/Iu  0      0;
+     0 0 0       0         0       0           0  0   0    0     -B_th/Iv 0;
+     0 0 0       0         0       0           0  0   0    0       0  -B_psi/Iw]; 
  
 %    F_x/M   F_y/M   F_z/M   Tau_x/Ix   Tau_y/Iy   Tau_z/Iz
 B = [  0       0       0        0          0          0;  % x dot
@@ -167,7 +163,7 @@ cogVec         = zeros(length(tVec), 3);
 
 % ----- Initialize all states and set 1st state
 states = zeros(12, length(tVec));
-%                    [x       y       z     ],[v_u v_v v_w phi th psi w_phi w_th w_psi]'
+%                    [x       y       z     ], [v_u v_v v_w phi th psi w_phi w_th w_psi]'
 states(:, 1) = cat(2,[cog(1)  -cog(2)  -cog(3)],shipStruct.x0)'; 
 
 % ----- Rotate facePoints & normals according to initial states
@@ -221,7 +217,7 @@ for tIdx=1:length(tVec)-1
     velInGlobalCoord = R(phi, th, psi)' * [v_u; v_v; v_w];
     rotVelDerivative = T(phi, th) * [w_phi; w_th; w_psi];
     
-    coriolisV = cross([w_phi, w_th, w_psi]',[v_u, v_v, v_w]');
+    coriolisV = cross([w_phi, w_th, w_psi]', [v_u, v_v, v_w]');
     
     % Make time-update as below due to non-linearities in the A matrix
     states(:, tIdx+1) = [states(1,tIdx) + sys.A(1,4) * velInGlobalCoord(1);
@@ -267,6 +263,8 @@ end
 
 %% Help functions
 function [facePoints, faceAreas, normals] = calculatePointsAreasNormals(V)
+    % Returns facepoints which are the center of the triangles, the
+    % triangles' areas and the normals to the triangles.
     j = 1;
     for i=1:3:length(V)-2
         facePoints(j, :) = [mean(V(i:i+2,1)), mean(V(i:i+2, 2)), mean(V(i:i+2, 3))];
@@ -290,13 +288,7 @@ function T = T(phi, th)
 end
 function regulation = pRegulator(Kp, refValue, currentValue)
 % Simple P-control of speed.
-    regulation = Kp * (refValue - currentValue);
-    %if regulation > 2e4
-    %    regulation = 2e4;
-    %elseif regulation < -2e4
-    %    regulation = -2e4;
-    %end
-    
+    regulation = Kp * (refValue - currentValue);    
 end
 function velMeterPerTs = getVelMetPerTs(vel, Ts)
 % Gets a velocity in m/s and returns a velocity in m/Ts

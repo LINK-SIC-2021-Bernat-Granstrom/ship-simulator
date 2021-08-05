@@ -1,5 +1,6 @@
 % Demonstration of how to create wave files with different wave properties.
-% Created by: Matheus Bernat & Ludvig Granström in 2021
+% Authors: Matheus Bernat & Ludvig Granström 2021
+% Last updated: July 2021
 
 % Add paths to wave-files, help-files
 helpFilesPath = [pwd, '\help-files'];

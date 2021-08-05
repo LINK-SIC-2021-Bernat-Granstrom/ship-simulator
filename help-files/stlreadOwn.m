@@ -25,11 +25,6 @@ function varargout = stlreadOwn(file)
     fclose(fid);
     
     [f,v,n] = stlbinary(M);
-    %if( isbinary(M) ) % This may not be a reliable test
-    %    [f,v,n] = stlbinary(M);
-    %else
-    %    [f,v,n] = stlascii(M);
-    %end
     
     varargout = cell(1,nargout);
     switch nargout        

@@ -34,9 +34,9 @@ Hs = getSignificantWaveHeight(seaState);
 dw = 0.1;
 wVec = (dw/2:dw:3)';
 
-A = 8.1 * 1e-3 * g^2; % constant, eq 8.54
-B = 3.11 / (Hs^2);    % eq 8.55
-specType = 1; % Bretschneider (@ Fossen pg 203), from kravspec 
+A = 8.1 * 1e-3 * g^2; % constant, Equation (8.54) in Fossen
+B = 3.11 / (Hs^2);    % Equation (8.55) in Fossen
+specType = 1; % Bretschneider (@ Fossen pg 203) 
 S = wavespec(specType, [A, B], wVec, 0);
 S(1) = 0; % the first element is NaN for some reason
 
