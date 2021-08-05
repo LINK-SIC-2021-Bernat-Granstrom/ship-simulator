@@ -1,6 +1,8 @@
 function Hs=getSignificantWaveHeight(seaState)
 % Get Hs given sea state. Reference: Fossen's handbook pg. 204.
-    if seaState == 1 
+    if seaState == 0 
+        Hs = 0;       
+    elseif seaState == 1 
         Hs = (0.3 - 0) * rand;         % Hs between 0 and 0.3
     elseif seaState == 2 
         Hs = 0.3 + (0.6 - 0.3) * rand; % Hs between 0.3 and 0.6

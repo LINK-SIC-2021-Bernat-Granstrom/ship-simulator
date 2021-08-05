@@ -36,7 +36,7 @@ shipStruct.M           = 2.5e6;
 shipStruct.len         = 137;
 shipStruct.width       = 15;
 shipStruct.height      = 16;
-shipStruct.verticesPos = [30 35 5.55];
+shipStruct.verticesPos = [150 150 5.55];
 shipStruct.cogOffset   = [-4.77 0.022 -2];
 shipStruct.refSpeedU   = 0;
 shipStruct.refYaw      = 0;
@@ -119,15 +119,18 @@ waveFile = 'waves__seaState_3__long__beta_3.14__grid_300x100__time_0_0.2_500__U_
 waveFile = 'waves__seaState_3__short__beta_3.14__grid_300x100__time_0_0.2_500__U_7.72.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
-%% --------------- Demo #7: Stabilization test
+%% --------------- Demo #7: Stabilization test (crazy results)
 % ------- Use wave with properties below
 % Sea state:        3
 % Wave type :       No waves
-% Grid:             300x100
+% Grid:             500x300
 % Time:             0:0.2:50
 % Ship speed        0
 
-waveFile = 'waves_seaState_3_long_beta_3.14_grid_300x100_time_0_0.2_500.mat';
+%               [v_u v_v v_w phi th psi w_phi w_th w_psi]'
+shipStruct.x0 = [0    0   0  deg2rad(40)   0  0   0     0    0]; % Initial state values
+
+waveFile = 'waves__seaState_0__long__beta_3.14__grid_500x300__time_0_0.2_60__U_0.mat';
 [states, face, vert, cogVec] = simulateShip(waveFile, shipStruct, true, true);
 
 %% --------------- Demo #8: Corridor test

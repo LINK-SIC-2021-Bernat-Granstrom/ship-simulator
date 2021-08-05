@@ -258,7 +258,7 @@ toc;
 % ------------------------------- Plot states through time ----------------
 if isPlot
     plotShipStates(states, tVec, Ts, beta);
-    plotHelipadStates(states, tVec, Ts, beta, shipStruct.helipadPos);
+%     plotHelipadStates(states, tVec, Ts, beta, shipStruct.helipadPos);
 end
 % ------------------------------- Visualize simulation in 3D --------------
 if isVisual
