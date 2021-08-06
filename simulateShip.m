@@ -84,9 +84,9 @@ Ki_force  = 0.82;
 Kp_torque = 3.5;
 Ki_torque = 0.5;
 
-C_du = 5;
-C_dv = 5;
-C_dw = 5;
+C_du = 2.5;
+C_dv = 2.5;
+C_dw = 2.5;
 
 B_phi = 1e10 / 20;
 B_th  = 1e10;
@@ -123,18 +123,18 @@ disp('3) Simulating states through time...');
 
 % ----- Define update matrices A and B (C is arbitrary) and discretize.
 %    x y z      v_u       v_v     v_w         phi th psi w_phi   w_th w_psi
-A = [0 0 0       1         0       0           0  0   0    0       0      0;
-     0 0 0       0         1       0           0  0   0    0       0      0;
-     0 0 0       0         0       1           0  0   0    0       0      0;
-     0 0 0 -0.5*C_du*ro*Au/M 0       0         0  0   0    0       0      0;
-     0 0 0       0 -0.5*C_dv*ro*Av/M 0         0  0   0    0       0      0;
-     0 0 0       0         0 -0.5*C_dw*ro*Aw/M 0  0   0    0       0      0;
-     0 0 0       0         0       0           0  0   0    1       0      0;
-     0 0 0       0         0       0           0  0   0    0       1      0;
-     0 0 0       0         0       0           0  0   0    0       0      1;
-     0 0 0       0         0       0           0  0   0 -B_phi/Iu  0      0;
-     0 0 0       0         0       0           0  0   0    0     -B_th/Iv 0;
-     0 0 0       0         0       0           0  0   0    0       0  -B_psi/Iw]; 
+A = [0 0 0       1         0       0          0  0   0    0       0      0;
+     0 0 0       0         1       0          0  0   0    0       0      0;
+     0 0 0       0         0       1          0  0   0    0       0      0;
+     0 0 0 -C_du*ro*Au/M   0       0          0  0   0    0       0      0;
+     0 0 0       0 -C_dv*ro*Av/M   0          0  0   0    0       0      0;
+     0 0 0       0         0 -C_dw*ro*Aw/M    0  0   0    0       0      0;
+     0 0 0       0         0       0          0  0   0    1       0      0;
+     0 0 0       0         0       0          0  0   0    0       1      0;
+     0 0 0       0         0       0          0  0   0    0       0      1;
+     0 0 0       0         0       0          0  0   0 -B_phi/Iu  0      0;
+     0 0 0       0         0       0          0  0   0    0     -B_th/Iv 0;
+     0 0 0       0         0       0          0  0   0    0       0  -B_psi/Iw]; 
  
 %    F_x/M   F_y/M   F_z/M   Tau_x/Ix   Tau_y/Iy   Tau_z/Iz
 B = [  0       0       0        0          0          0;  % x dot
